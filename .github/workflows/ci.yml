@@ -59,10 +59,15 @@ jobs:
           python-version: '3.12'
       - run: node tools/test_apps_script.js
       - run: node --check web/app.js
+      # Se compara la huella (ETag = SHA-256 de web/), no los bytes gzip:
+      # cada versión de zlib comprime distinto aunque el contenido sea idéntico.
       - name: El encabezado web_assets.h está al día con web/
         run: |
+          antes=$(grep -o 'WEB_ETAG\[\] = "[^;]*' firmware/Timbre_Alba_V2/web_assets.h)
           python3 tools/build_web.py
-          git diff --exit-code firmware/Timbre_Alba_V2/web_assets.h
+          despues=$(grep -o 'WEB_ETAG\[\] = "[^;]*' firmware/Timbre_Alba_V2/web_assets.h)
+          if [ "$antes" != "$despues" ]; then
+            echo "::error::web/ cambió pero web_assets.h no se regeneró. Ejecute: python3 tools/build_web.py"; exit 1; fi
       - name: Interfaz de punta a punta
         env:
           MOCK_PASSWORD: Clave-de-Prueba-CI-1
