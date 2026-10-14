@@ -1,0 +1,4 @@
+/* Barra fija que deja claro que es una demostración */
+.demo-bar{position:relative;z-index:70;background:#e9bd68;color:#10243a;font:13.5px/1.4 system-ui,sans-serif;padding:8px 16px;text-align:center}
+.demo-bar button{margin-left:8px;border:1px solid #10243a;background:transparent;color:#10243a;border-radius:8px;padding:3px 10px;font:inherit;font-weight:700;cursor:pointer}
+.demo-bar+.auth,.demo-bar~.auth{min-height:calc(100vh - 40px)}

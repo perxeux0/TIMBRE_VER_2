@@ -68,6 +68,10 @@ jobs:
           despues=$(grep -o 'WEB_ETAG\[\] = "[^;]*' firmware/Timbre_Alba_V2/web_assets.h)
           if [ "$antes" != "$despues" ]; then
             echo "::error::web/ cambió pero web_assets.h no se regeneró. Ejecute: python3 tools/build_web.py"; exit 1; fi
+      - name: La demo (demo/) está al día con web/
+        run: |
+          python3 tools/build_demo.py
+          git diff --exit-code demo/ || { echo "::error::Ejecute python3 tools/build_demo.py"; exit 1; }
       - name: Interfaz de punta a punta
         env:
           MOCK_PASSWORD: Clave-de-Prueba-CI-1

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10243a">
+<meta name="referrer" content="no-referrer">
+<title>Timbre Alba · Demostración</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="demo.css">
+</head>
+<body>
+<noscript><p class="noscript">Active JavaScript para usar el panel del timbre.</p></noscript>
+
+<!-- Ingreso -->
+<main id="login" class="auth hidden" aria-labelledby="login-title">
+  <form id="login-form" class="auth-card" autocomplete="on" novalidate>
+    <div class="auth-brand"><span class="logo" data-icon="bell"></span><div><strong>Timbre Alba</strong><small>Sistema de timbres escolares</small></div></div>
+    <h1 id="login-title">Ingresar</h1>
+    <label for="lu">Usuario</label>
+    <input id="lu" name="username" autocomplete="username" autocapitalize="words" spellcheck="false" required maxlength="20">
+    <label for="lp">Contraseña</label>
+    <div class="pw"><input id="lp" name="password" type="password" autocomplete="current-password" required maxlength="64"><button type="button" class="pw-toggle" data-toggle-pw="lp" aria-label="Mostrar contraseña" data-icon="eye"></button></div>
+    <p id="login-msg" class="form-msg" role="alert"></p>
+    <button class="btn primary block" type="submit" id="login-btn">Ingresar</button>
+    <p class="fine">Conéctese a la red Wi-Fi del timbre. Si olvidó su contraseña, pídale a un administrador que la restablezca.</p>
+  </form>
+</main>
+
+<!-- Cambio obligatorio de contraseña -->
+<main id="change" class="auth hidden" aria-labelledby="change-title">
+  <form id="change-form" class="auth-card" novalidate>
+    <div class="auth-brand"><span class="logo" data-icon="key"></span><div><strong>Primer ingreso</strong><small id="change-user"></small></div></div>
+    <h1 id="change-title">Cree su contraseña personal</h1>
+    <p class="muted">Por seguridad, la contraseña inicial solo sirve una vez. La nueva debe tener al menos 10 caracteres, con letras y números.</p>
+    <label for="cp-old">Contraseña actual</label>
+    <input id="cp-old" type="password" autocomplete="current-password" required maxlength="64">
+    <label for="cp-new">Nueva contraseña</label>
+    <div class="pw"><input id="cp-new" type="password" autocomplete="new-password" required minlength="10" maxlength="64"><button type="button" class="pw-toggle" data-toggle-pw="cp-new" aria-label="Mostrar contraseña" data-icon="eye"></button></div>
+    <div class="meter" aria-hidden="true"><span id="cp-meter"></span></div>
+    <label for="cp-new2">Repita la nueva contraseña</label>
+    <input id="cp-new2" type="password" autocomplete="new-password" required maxlength="64">
+    <p id="change-msg" class="form-msg" role="alert"></p>
+    <button class="btn primary block" type="submit">Guardar y continuar</button>
+    <button class="btn ghost block" type="button" data-action="logout">Salir</button>
+  </form>
+</main>
+
+<!-- Aplicación -->
+<div id="app" class="shell hidden">
+  <aside id="sidebar" class="sidebar" aria-label="Menú principal">
+    <div class="side-brand"><span class="logo" data-icon="bell"></span><div><strong id="dev-name">Timbre Alba</strong><small>Sistema de timbres</small></div></div>
+    <nav id="nav"></nav>
+    <div class="side-user">
+      <span class="avatar" id="me-initial">?</span>
+      <div><strong id="me-name"></strong><small id="me-role"></small></div>
+      <button class="icon-btn" data-action="logout" aria-label="Cerrar sesión" title="Cerrar sesión" data-icon="logout"></button>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim" data-action="close-menu"></div>
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" data-action="open-menu" aria-label="Abrir menú" data-icon="menu"></button>
+      <h1 id="view-title">Inicio</h1>
+      <div class="top-status" id="top-status"></div>
+    </header>
+    <div id="banners"></div>
+    <section id="view" class="view" tabindex="-1" aria-live="polite"></section>
+    <footer class="foot">Timbre Alba · <span id="foot-ver"></span> · funciona en su red local</footer>
+  </div>
+</div>
+
+<div id="modal-root"></div>
+<div id="toasts" class="toasts" aria-live="polite"></div>
+<script src="demo-api.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

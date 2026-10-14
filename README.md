@@ -9,6 +9,8 @@ Timbre escolar programable con **ESP32-C3 SuperMini**. Lo controla un panel web 
 - Incluye **copias de seguridad cifradas** (AES-256-GCM) para restaurar toda la configuración desde el panel.
 - **El repositorio no contiene ninguna contraseña.** Ver [SECURITY.md](SECURITY.md).
 
+> 🖥️ **Demostración en línea:** [perxeux0.github.io/TIMBRE_VER_2/demo/](https://perxeux0.github.io/TIMBRE_VER_2/demo/). Muestra el panel completo con datos simulados en su navegador; no controla ningún timbre. Para entrar: **Rector** (administrador) o **Docente** (usuario), clave `Demo-Timbre-2026`. Rector debe crear una clave propia al entrar, igual que en el equipo real.
+
 ---
 
 ## Arquitectura
@@ -176,6 +178,7 @@ docs/                  cableado y seguridad eléctrica
 
 ```bash
 python3 tools/build_web.py                       # tras editar web/ → regenera web_assets.h
+python3 tools/build_demo.py                      # tras editar web/ → regenera la demo de GitHub Pages (demo/)
 MOCK_PASSWORD="Clave-de-Prueba-1" python3 tools/mock_server.py   # panel sin placa en http://localhost:8080
 python3 tools/test_ui.py                         # 28 pruebas de punta a punta (Playwright)
 node tools/test_apps_script.js                   # 22 pruebas de Apps Script (Drive, firma, duplicados)
