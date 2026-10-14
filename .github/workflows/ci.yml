@@ -1,0 +1,73 @@
+name: Verificación
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  secretos:
+    name: Buscar secretos filtrados
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: secrets.h no debe existir en el repositorio
+        run: |
+          if git ls-files | grep -E '(^|/)secrets\.h$'; then
+            echo "::error::secrets.h está en el repositorio. Bórrelo, rote las claves y limpie el historial."; exit 1; fi
+
+  firmware:
+    name: Compilar firmware ESP32-C3
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: secrets.h de prueba (valores falsos)
+        run: cp firmware/Timbre_Alba_V2/secrets.example.h firmware/Timbre_Alba_V2/secrets.h
+      - uses: arduino/compile-sketches@v1
+        with:
+          fqbn: esp32:esp32:esp32c3:CDCOnBoot=cdc,PartitionScheme=no_ota
+          platforms: |
+            - name: esp32:esp32
+              source-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
+              version: 3.3.12
+          libraries: |
+            - name: Rtc by Makuna
+              version: 2.5.0
+            - name: ArduinoJson
+              version: 7.4.2
+          sketch-paths: firmware/Timbre_Alba_V2
+          enable-warnings-report: true
+
+  pruebas:
+    name: Pruebas de Apps Script, interfaz y copias
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: node tools/test_apps_script.js
+      - run: node --check web/app.js
+      - name: El encabezado web_assets.h está al día con web/
+        run: |
+          python3 tools/build_web.py
+          git diff --exit-code firmware/Timbre_Alba_V2/web_assets.h
+      - name: Interfaz de punta a punta
+        env:
+          MOCK_PASSWORD: Clave-de-Prueba-CI-1
+        run: |
+          pip install cryptography playwright
+          python -m playwright install --with-deps chromium
+          python3 tools/mock_server.py & sleep 2
+          python3 tools/test_ui.py

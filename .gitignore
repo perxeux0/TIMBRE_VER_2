@@ -1,0 +1,33 @@
+# ===== SECRETOS: nunca al repositorio =====
+secrets.h
+**/secrets.h
+.env
+*.env
+*.pem
+*.key
+credentials*.json
+# Copias de seguridad del timbre (aunque estén cifradas, no van a GitHub)
+timbre-*.json
+copia*.json
+*.backup.json
+# Configuración local de clasp (Apps Script): contiene el ID del script
+.clasp.json
+.clasprc.json
+
+# ===== Compilación y herramientas =====
+build/
+.pio/
+*.bin
+*.elf
+*.map
+__pycache__/
+*.pyc
+node_modules/
+tools/screenshots/
+tools/qemu_crypto_test/crypto_util.h
+
+# ===== Sistema =====
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

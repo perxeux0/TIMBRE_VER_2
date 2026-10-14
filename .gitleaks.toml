@@ -1,0 +1,13 @@
+# Reglas extra de gitleaks para este proyecto (además de las predeterminadas).
+# Uso local:  gitleaks detect --source . -v
+[extend]
+useDefault = true
+
+[[rules]]
+id = "timbre-apps-script-secret"
+description = "Clave HMAC de Apps Script (64 hex) pegada en código"
+regex = '''(?i)(timbre_secret|gsKey|clave)[^\n]{0,20}['"][0-9a-f]{64}['"]'''
+
+[allowlist]
+description = "Plantillas con valores falsos"
+paths = ['''secrets\.example\.h$''']
